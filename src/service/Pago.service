@@ -1,0 +1,39 @@
+class PagoService {
+  constructor() {
+    this.strategy = null;
+    this.strategies = {
+      'TARJETA_CREDITO': new TarjetaCredito(),
+      'PAYPAL': new PayPal(),
+      'TRANSFERENCIA_BANCARIA': new TransferenciaBancaria()
+    };
+  }
+  
+  setStrategy(metodoPago) {
+    if (!this.strategies[metodoPago]) {
+      throw new Error(`Método de pago ${metodoPago} no soportado`);
+    }
+    
+    this.strategy = this.strategies[metodoPago];
+    return this;
+  }
+  
+  async procesarPago(monto, datosRequeridos) {
+    if (!this.strategy) {
+      throw new Error('Debe seleccionar un método de pago');
+    }
+    
+    return await this.strategy.pagar(monto, datosRequeridos);
+  }
+  
+  getDatosRequeridos() {
+    if (!this.strategy) {
+      throw new Error('Debe seleccionar un método de pago');
+    }
+    
+    return this.strategy.getDatosRequeridos();
+  }
+  
+  getMetodos() {
+    return Object.keys(this.strategies);
+  }
+}
