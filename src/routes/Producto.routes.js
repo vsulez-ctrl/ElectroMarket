@@ -15,7 +15,7 @@ const productoController = new ProductoController(productoService, busquedaServi
 router.get("/", (req, res) => productoController.obtenerTodos(req, res));
 router.get("/:id", (req, res) => productoController.obtenerPorId(req, res));
 router.get("/categoria/:categoria", (req, res) => productoController.obtenerPorCategoria(req, res));
-router.get("/buscar/texto", (req, res) => productoController.buscarProductos(req, res));
-router.get("/filtros/disponibles", (req, res) => productoController.obtenerFiltrosDisponibles(req, res));
+router.get("/buscar", (req, res) => productoController.buscarProductos(req, res));
+router.get("/buscar/filtros", (req, res) => productoController.obtenerFiltrosBusqueda(req, res));
 
 module.exports = router;

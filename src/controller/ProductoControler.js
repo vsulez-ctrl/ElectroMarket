@@ -80,14 +80,15 @@ class ProductoController {
   /**
    * Obtener filtros disponibles
    */
-  obtenerFiltrosDisponibles(req, res) {
-    try {
-      const filtros = this.busquedaService.obtenerFiltrosDisponibles();
-      res.json(filtros);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+ obtenerFiltrosBusqueda(req, res) {
+  try {
+    const { query } = req.query;
+    const filtros = this.busquedaService.obtenerFiltrosDisponibles(query || "");
+    res.json(filtros);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+}
 }
 
 module.exports = ProductoController;

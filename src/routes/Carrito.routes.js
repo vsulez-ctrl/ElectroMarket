@@ -1,12 +1,18 @@
 const express = require("express");
-const router = express.Router();
 const CarritoController = require("../controller/CarritoController");
+const autenticar = require("../middlewares/auth.middleware");
 
-// Rutas del carrito
-router.post("/:clienteId/agregar", CarritoController.agregarProducto);
-router.delete("/:clienteId/eliminar/:productoId", CarritoController.eliminarProducto);
-router.put("/:clienteId/actualizar", CarritoController.actualizarCantidad);
-router.get("/:clienteId", CarritoController.obtenerCarrito);
-router.get("/:clienteId/subtotal", CarritoController.calcularSubtotal);
+const router = express.Router();
+
+// Using static methods directly from CarritoController
+router.post("/agregar", autenticar, CarritoController.agregarProducto);
+
+router.delete("/eliminar/:productoId", autenticar, CarritoController.eliminarProducto);
+
+router.put("/actualizar", autenticar, CarritoController.actualizarCantidad);
+
+router.get("/", autenticar, CarritoController.obtenerCarrito);
+
+router.get("/subtotal", autenticar, CarritoController.calcularSubtotal);
 
 module.exports = router;

@@ -54,7 +54,16 @@ class CarritoCompra {
     const cantidad = this.items.get(productId) || 0;
     return producto ? producto.getPrecio() * cantidad : 0;
   }
-
+calcularSubtotalTotal() {
+    let subtotal = 0;
+    for (let [productId, cantidad] of this.items) {
+      const producto = this.productService.getById(productId);
+      if (producto) {
+        subtotal += producto.getPrecio() * cantidad;
+      }
+    }
+    return subtotal;
+  }
   // Calcular total
   getTotal() {
     let total = 0;

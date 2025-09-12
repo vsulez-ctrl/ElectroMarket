@@ -39,14 +39,22 @@ class BusquedaService {
   /**
    * Retorna los filtros que se pueden aplicar al catálogo
    */
-  obtenerFiltrosDisponibles() {
-    return {
-      marcas: this.productService.obtenerMarcasDisponibles(),
-      categorias: this.productService.obtenerCategoriasDisponibles(),
-      rangoPrecio: this.productService.obtenerRangoPrecio(),
-      disponibilidad: true,
-    };
-  }
+  obtenerFiltrosDisponibles(query) {
+  const productosFiltrados = query
+    ? this.buscarPorTexto(query)
+    : this.productService.obtenerTodos();
+
+  return {
+    marcas: [...new Set(productosFiltrados.map((p) => p.marca))],
+    categorias: [...new Set(productosFiltrados.map((p) => p.categoria))],
+    rangoPrecio: {
+      min: Math.min(...productosFiltrados.map((p) => p.precio)),
+      max: Math.max(...productosFiltrados.map((p) => p.precio)),
+    },
+    disponibilidad: true,
+  };
+}
+
 
   /**
    * Aplica filtros manualmente a una lista de productos
