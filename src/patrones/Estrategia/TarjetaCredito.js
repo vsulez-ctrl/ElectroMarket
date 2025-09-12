@@ -123,13 +123,11 @@ class TarjetaCredito extends PagoStrategy {
   }
   
   async procesarConGateway(monto, datos) {
-    // Simular llamada a API de gateway de pago
-    // En producción, aquí integrarías con Stripe, PayU, MercadoPago, etc.
     
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        // Simular respuesta del gateway
-        const exitoso = Math.random() > 0.1; // 90% de éxito
+      
+        const exitoso = Math.random() > 0.1; 
         
         if (exitoso) {
           resolve({
@@ -140,7 +138,7 @@ class TarjetaCredito extends PagoStrategy {
         } else {
           reject(new Error('Pago rechazado por el banco'));
         }
-      }, 2000); // Simular latencia de red
+      }, 2000); 
     });
   }
 }

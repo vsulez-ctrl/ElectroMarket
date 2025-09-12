@@ -1,4 +1,3 @@
-// intefaz
 
 class PagoStrategy {
   async pagar(monto, datosRequeridos) {

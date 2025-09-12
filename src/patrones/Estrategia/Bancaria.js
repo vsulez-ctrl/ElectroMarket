@@ -1,4 +1,4 @@
-class TransferenciaBancaria extends PagoStrategy {
+class Bancaria extends PagoStrategy {
   constructor() {
     super();
     this.tipo = 'TRANSFERENCIA_BANCARIA';
@@ -10,9 +10,7 @@ class TransferenciaBancaria extends PagoStrategy {
       if (!datosValidos.esValido) {
         throw new Error(datosValidos.mensaje);
       }
-      
-      // Para transferencias, generamos instrucciones de pago
-      const instruccionesPago = await this.generarInstrucciones(monto, datosRequeridos);
+            const instruccionesPago = await this.generarInstrucciones(monto, datosRequeridos);
       
       return {
         exitoso: true,
@@ -22,7 +20,7 @@ class TransferenciaBancaria extends PagoStrategy {
         monto: monto,
         fecha: new Date(),
         detalles: instruccionesPago,
-        requiereConfirmacion: true, // Indica que necesita confirmación manual
+        requiereConfirmacion: true, 
         estadoPago: 'PENDIENTE_TRANSFERENCIA'
       };
       

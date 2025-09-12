@@ -1,11 +1,11 @@
 const Usuario = require("./Usuario")
-
+const CarritoCompra = require("../patrones/Singleton/CarritoCompra");
 class Cliente extends Usuario{
     constructor(id, email, password, nombre, direccion, telefono){
         super(id, email, password, nombre);
         this.direccion = direccion;
         this.telefono = telefono;
-        this.carrito = null; 
+        this.carrito = CarritoCompra.getInstance(id); 
     }
 
      getInfo() {
