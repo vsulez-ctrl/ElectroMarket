@@ -1,4 +1,4 @@
-const Producto = require("../models/Entidades/Producto");
+const Producto = require("../models/Entidades/Productos");
 
 class ProductoService {
   constructor() {

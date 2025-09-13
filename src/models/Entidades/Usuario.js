@@ -9,11 +9,7 @@ class Usuario
         this.nombre = nombre
     }
 
-    async autenticar(email, password)
-    {
-
-    }
-
+ 
     getInfo()
     {
         return{
@@ -24,10 +20,6 @@ class Usuario
         };
     }
 
-    async actualizarDatos(nombre,email, password)
-    {
-
-    }
 
 }
 

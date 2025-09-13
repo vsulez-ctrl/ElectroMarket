@@ -1,66 +1,36 @@
 class Producto {
-  constructor(id, nombre, descripcion, precio, categoria, marca, stock_actual, stock_minimo) {
-    this.id = id;
-    this.nombre = nombre;
-    this.descripcion = descripcion;
-    this.precio = precio;
-    this.categoria = categoria;
-    this.marca = marca;
-    this.stock_actual = stock_actual;
-    this.stock_minimo = stock_minimo;
-    this.activo = true;
-    this.fecha_creacion = new Date();
-    this.fecha_actualizacion = new Date();
-  }
+    constructor(datos) {
+        if (this.constructor === Producto) {
+            throw new Error('No se puede instanciar clase abstracta Producto');
+        }
+        this.id = datos.id;
+        this.nombre = datos.nombre;
+        this.descripcion = datos.descripcion;
+        this.precio = datos.precio;
+        this.categoria = datos.categoria;
+        this.marca = datos.marca;
+        this.stock_actual = datos.stock_actual;
+        this.activo = datos.activo;
+        this.fecha_creacion = datos.fecha_creacion;
+    }
 
-  // Getters
-  getId() {
-    return this.id;
-  }
+    getId() { return this.id; }
+    getNombre() { return this.nombre; }
+    getDescripcion() { return this.descripcion; }
+    getPrecio() { return this.precio; }
+    getCategoria() { return this.categoria; }
+    getMarca() { return this.marca; }
+    getStock() { return this.stock_actual; }
+    isActivo() { return this.activo; }
+    getFechaCreacion() { return this.fecha_creacion; }
 
-  getNombre() {
-    return this.nombre;
-  }
+    setStock(cantidad) {
+        this.stock_actual = cantidad;
+    }
 
-  getPrecio() {
-    return this.precio;
-  }
-
-  getCategoria() {
-    return this.categoria;
-  }
-
-  getMarca() {
-    return this.marca;
-  }
-
-  getStock() {
-    return this.stock_actual;
-  }
-
-  isActivo() {
-    return this.activo;
-  }
-
-  isDisponible() {
-    return this.activo && this.stock_actual > this.stock_minimo;
-  }
-
-  // Setters
-  setStock(cantidad) {
-    if (cantidad < 0) throw new Error("El stock no puede ser negativo.");
-    this.stock_actual = cantidad;
-    this.fecha_actualizacion = new Date();
-  }
-
-  // Validaciones
-  validarDatos() {
-    if (!this.nombre || this.nombre.trim() === "") return false;
-    if (this.precio <= 0) return false;
-    if (this.stock_actual < 0) return false;
-    if (!this.categoria) return false;
-    return true;
-  }
+    validarDatos() {
+        return this.nombre && this.precio >= 0 && this.stock_actual >= 0;
+    }
 }
 
 module.exports = Producto;
