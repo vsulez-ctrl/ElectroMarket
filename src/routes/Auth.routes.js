@@ -13,6 +13,8 @@ router.post("/login", AuthController.login);
 router.get("/verificar", AuthController.verificarToken);
 
 // Ruta para debug - ver todos los clientes (opcional, remover en producción)
-router.get("/", AuthController.obtenerClientes);
+router.get("/clientes", AuthController.obtenerClientes);
+
+router.get("/administradores", AuthController.obtenerAdministradores);
 
 module.exports = router;

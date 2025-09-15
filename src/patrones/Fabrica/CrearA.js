@@ -1,6 +1,6 @@
-import { ProductoA } from '../entidades/ProductoA.js';
+const ProductoA = require( '../../models/Entidades/ProductoA');
 
-export class CrearA {
+class CrearA {
     static ultimoIdGenerado = 0;
 
     crearProducto(datos) {
@@ -22,3 +22,5 @@ export class CrearA {
         if (datos.voltaje) producto.voltaje = datos.voltaje;
     }
 }
+
+module.exports = CrearA;

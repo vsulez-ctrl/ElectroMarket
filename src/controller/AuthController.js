@@ -6,7 +6,7 @@ const authService = new AuthService();
 class AuthController {
     static async registrar(req, res) {
         try {
-            const { nombre, email, password, direccion, telefono } = req.body;
+            const { nombre, email, password, direccion, telefono, rol } = req.body;
 
             // Validaciones básicas
             if (!nombre || !email || !password) {
@@ -15,24 +15,27 @@ class AuthController {
                 });
             }
 
-            if (password.length < 6) {
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+
+            if (!passwordRegex.test(password)) {
                 return res.status(400).json({
-                    error: "La contraseña debe tener al menos 6 caracteres"
+                    error: "La contraseña debe tener mínimo 8 caracteres, incluyendo al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo (!@#$%^&*)."
                 });
             }
 
             // Registrar cliente
-            const nuevoCliente = await authService.registrar({
+            const nuevoUsuario = await authService.registrar({
                 nombre,
                 email,
                 password,
                 direccion,
-                telefono
+                telefono,
+                rol: rol || "cliente"
             });
 
             res.status(201).json({
-                message: "Cliente registrado exitosamente",
-                cliente: nuevoCliente.getInfo()
+                message: "Usuario registrado exitosamente",
+                usuario: nuevoUsuario.getInfo()
             });
 
         } catch (error) {
@@ -59,7 +62,7 @@ class AuthController {
             res.json({
                 message: "Login exitoso",
                 token: resultado.token,
-                cliente: resultado.usuario.getInfo()
+                usuario: resultado.usuario.getInfo()
             });
 
         } catch (error) {
@@ -104,6 +107,18 @@ class AuthController {
             const clientes = authService.obtenerTodosLosClientes();
             res.json({
                 clientes: clientes
+            });
+        } catch (error) {
+            res.status(500).json({
+                error: error.message
+            });
+        }
+    }
+     static obtenerAdministradores(req, res) {
+        try {
+            const administradores = authService.obtenerTodosLosAdministradores();
+            res.json({
+                admin: administradores
             });
         } catch (error) {
             res.status(500).json({

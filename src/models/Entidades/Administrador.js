@@ -1,12 +1,13 @@
 const  SesionAdministrador = require( '../../patrones/Singleton/SesionAdministrador');
 const FabricaProducto = require('../../patrones/Fabrica/FabricaProducto');
 const   Reportes = require( '../../patrones/Estrategia/Reportes');
-class Administrador {
-    constructor(id, nombre, email, rol) {
-        this.id = id;
-        this.nombre = nombre;
-        this.email = email;
+const Usuario = require("./Usuario")
+class Administrador extends Usuario {
+    constructor(id, email,password, nombre, direccion, telefono, rol) {
+        super(id, email, password, nombre);
         this.rol = rol;
+         this.direccion = direccion;
+        this.telefono = telefono;
         this.sesion = SesionAdministrador.getInstancia();
         this.fabrica = new FabricaProducto();
         this.reportes = new Reportes();
@@ -29,6 +30,14 @@ class Administrador {
     }
     verPanelControl() {
         console.log('Mostrando panel de control...');
+    }
+
+        getInfo() {
+        return {
+            ...super.getInfo(),
+            telefono: this.telefono,
+            tipo: 'admin'
+        };
     }
 }
 

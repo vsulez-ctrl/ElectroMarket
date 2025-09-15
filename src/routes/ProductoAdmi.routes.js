@@ -3,6 +3,26 @@ const FabricaProducto = require( '../patrones/Fabrica/FabricaProducto');
 const router = express.Router();
 const fabricaProducto = new FabricaProducto();
 
+
+router.get("/", (req, res)=>{
+    try{
+
+       const productos = fabricaProducto.obtenerProductos()
+       return res.json({
+        exito:true,
+        data: productos
+       });
+    }
+    catch(error){
+        return res.status(500).json({
+            exito: false,
+            mensaje:  'Error obtener productos: ' + error.message
+            
+        });
+
+    }
+
+});
 // Crear producto
 router.post('/crear', (req, res) => {
     try {

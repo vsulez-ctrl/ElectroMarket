@@ -14,11 +14,27 @@ function autenticar(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, ENV.JWT_SECRET);
-    req.clienteId = decoded.id; // aquí guardamos el id en la request
+
+     req.usuario = {
+      id: decoded.id,
+      email: decoded.email,
+      rol: decoded.rol,  // 👈 ahora también guardamos el rol
+    };
     next();
   } catch (error) {
     return res.status(401).json({ error: "Token inválido o expirado" });
   }
 }
 
-module.exports = autenticar;
+
+function isAdmin(req,res,next){
+ try {
+    if (req.usuario && req.usuario.rol === "admin") {
+      return next();
+    }
+    return res.status(403).json({ error: "Acceso denegado: no eres admin" });
+  } catch (error) {
+    return res.status(500).json({ error: "Error en validación de admin" });
+  }
+}
+module.exports = {autenticar, isAdmin};

@@ -1,11 +1,11 @@
 const express = require('express');
 const carritoRoutes = require("./routes/Carrito.routes");
 const productoRoutes = require("./routes/Producto.routes");
-const clienteRoutes = require("./routes/Auth.routes");
+const AuthRoutes = require("./routes/Auth.routes");
 
-const rutasAdministrador = require("./routes/Administrador.routes")
-const rutasProducto = require("./routes/ProductoAdmi.routes")
-const rutasReporte = require("./routes/Reporte.routes")
+const adminRoutes = require("./routes/Administrador.routes")
+const adminProductoRoutes = require("./routes/ProductoAdmi.routes")
+const adminReporteRoutes = require("./routes/Reporte.routes")
 
 const app = express();
 
@@ -14,10 +14,11 @@ app.use(express.json());
 
 app.use("/carrito", carritoRoutes);
 app.use("/productos", productoRoutes);
-app.use("/clientes", clienteRoutes);
+app.use("/auth",AuthRoutes);
 
-app.use('/administradores', rutasAdministrador);
-app.use('/productos', rutasProducto);
-app.use('/reportes', rutasReporte);
+app.use('/admi/productos', adminProductoRoutes);
+app.use('/reportes', adminReporteRoutes);
+
+app.use("/admin", adminRoutes)
 
 module.exports = app;

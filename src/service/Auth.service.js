@@ -2,11 +2,13 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const ENV = require("../config/ENV");
 const Cliente = require("../models/Entidades/Cliente");
+const Administrador = require("../models/Entidades/Administrador");
 
 class AuthService {
   constructor() {
     // Simulamos una base de datos en memoria
     this.clientes = [];
+    this.administradores = []
     this.nextId = 1;
     this.initTestData(); // Opcional: datos de prueba
   }
@@ -23,63 +25,94 @@ class AuthService {
         hashedPassword,
         "Juan Pérez",
         "Calle 123 #45-67",
-        "3001234567"
+        "3001234567",
+        "cliente"
+      );
+
+       const adminPrueba = new Administrador(
+        1,
+        "admin@ejemplo.com",
+        hashedPassword,
+        "Admin Principal",
+        "Oficina Central",
+        "3100000000",
+        "admin" // 👈 rol admin
       );
       
       this.clientes.push(clientePrueba);
+      this.administradores.push(adminPrueba);
       this.nextId = 2;
       
-      console.log("Cliente de prueba creado: juan@ejemplo.com / 123456");
+      
     }
   }
 
-  async registrar(clienteData) {
-    const { nombre, email, password, direccion, telefono } = clienteData;
+  async registrar(usuarioData) {
+    const { nombre, email, password, direccion, telefono, rol } = usuarioData;
 
     // Verificar si el email ya existe
     const clienteExistente = this.clientes.find(c => c.email === email);
-    if (clienteExistente) {
+    const admiExistente = this.administradores.find( c=> c.email=== email );
+    if (clienteExistente || admiExistente ) {
       throw new Error("El email ya está registrado");
     }
 
     // Hashear contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // Crear nuevo cliente
-    const nuevoCliente = new Cliente(
-      this.nextId++,
-      email,
-      hashedPassword,
-      nombre,
-      direccion || '',
-      telefono || ''
-    );
+    let nuevoUsuario;
 
-    this.clientes.push(nuevoCliente);
-    return nuevoCliente;
+    if (rol === 'admin'){
+      nuevoUsuario = new Administrador(
+        this.nextId++,
+        email,
+         hashedPassword,
+        nombre,
+        direccion || "",
+        telefono || "",
+        "admin"
+      );
+      this.administradores.push(nuevoUsuario)
+    }else{
+       nuevoUsuario = new Cliente(
+        this.nextId++,
+        email,
+        hashedPassword,
+        nombre,
+        direccion || '',
+        telefono || '',
+        "cliente"
+      );
+  
+      this.clientes.push(nuevoUsuario);
+
+    }
+    // Crear nuevo usuario
+    return nuevoUsuario;
   }
 
   async login(email, password) {
-    // Buscar cliente por email
-    const cliente = this.clientes.find(c => c.email === email);
-    if (!cliente) {
-      throw new Error("Cliente no encontrado");
+    // Buscar en clientes y admi
+    let usuario = this.clientes.find(c => c.email === email) ||
+      this.administradores.find(a => a.email === email);
+    
+    if (!usuario) {
+      throw new Error("Usuario no encontrado");
     }
 
     // Verificar contraseña
-    const esValido = await bcrypt.compare(password, cliente.password);
+    const esValido = await bcrypt.compare(password, usuario.password);
     if (!esValido) {
       throw new Error("Contraseña incorrecta");
     }
-
+    console.log(usuario.rol)
     // Generar token
     const token = jwt.sign(
-      { id: cliente.id, email: cliente.email }, 
+      { id: usuario.id, email: usuario.email, rol: usuario.rol}, 
       ENV.JWT_SECRET, 
-      { expiresIn: "1h" }
+      { expiresIn: "2h" }
     );
 
-    return { token, usuario: cliente };
+    return { token, usuario };
   }
 
   verificarToken(token) {
@@ -90,14 +123,13 @@ class AuthService {
     }
   }
 
-  // Método para obtener cliente por ID (útil para debug)
-  obtenerClientePorId(id) {
-    return this.clientes.find(c => c.id === parseInt(id));
-  }
-
+ 
   // Método para obtener todos los clientes (útil para debug)
   obtenerTodosLosClientes() {
     return this.clientes.map(c => c.getInfo());
+  }
+  obtenerTodosLosAdministradores() {
+    return this.administradores.map(c => c.getInfo());
   }
 }
 
