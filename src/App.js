@@ -7,7 +7,16 @@ const adminRoutes = require("./routes/Administrador.routes")
 const adminProductoRoutes = require("./routes/ProductoAdmi.routes")
 const adminReporteRoutes = require("./routes/Reporte.routes")
 
+const cors = require('cors')
+
 const app = express();
+app.use(cors({
+  origin: "http://localhost:5173", // tu frontend
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
+
 
 app.use(express.json());
 
