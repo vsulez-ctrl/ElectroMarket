@@ -14,7 +14,11 @@ const productoController = new ProductoController(productoService, busquedaServi
 // Rutas
 router.get("/", (req, res) => productoController.obtenerTodos(req, res));
 router.get("/:id", (req, res) => productoController.obtenerPorId(req, res));
-router.get("/categoria/:categoria", (req, res) => productoController.obtenerPorCategoria(req, res));
+router.get("/categoria/:categoria", async(req, res) => {
+    
+    await productoController.obtenerPorCategoria(req, res)
+
+});
 router.get("/buscar", (req, res) => productoController.buscarProductos(req, res));
 router.get("/buscar/filtros", (req, res) => productoController.obtenerFiltrosBusqueda(req, res));
 

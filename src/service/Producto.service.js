@@ -1,76 +1,45 @@
 const Producto = require("../models/Entidades/Productos");
+const pool = require("../config/bd");
 
 class ProductoService {
   constructor() {
 
-    this.productos = [
-      new Producto(
-        1,
-        "Arduino UNO R3",
-        "Microcontrolador basado en ATmega328P, ideal para proyectos electrónicos",
-        120,
-        "Microcontroladores",
-        "Arduino",
-        30,
-        5
-      ),
-      new Producto(
-        2,
-        "ESP32 WiFi + Bluetooth",
-        "Microcontrolador de alto rendimiento con conectividad inalámbrica",
-        150,
-        "Microcontroladores",
-        "Espressif",
-        25,
-        5
-      ),
-      new Producto(
-        3,
-        "Sensor de Temperatura DHT22",
-        "Sensor digital de temperatura y humedad de alta precisión",
-        40,
-        "Sensores",
-        "Adafruit",
-        50,
-        10
-      ),
-      new Producto(
-        4,
-        "Sensor Ultrasónico HC-SR04",
-        "Sensor para medir distancias mediante ultrasonido",
-        25,
-        "Sensores",
-        "Generic",
-        60,
-        10
-      ),
-      new Producto(
-        5,
-        "Servo Motor SG90",
-        "Actuador de rotación de 180 grados, ideal para proyectos de robótica",
-        30,
-        "Actuadores",
-        "TowerPro",
-        80,
-        10
-      ),
-      new Producto(
-        6,
-        "Motor DC 12V",
-        "Motor eléctrico de corriente directa, para proyectos de mecatrónica",
-        45,
-        "Actuadores",
-        "Generic",
-        40,
-        5
-      )
-    ];
-
   }
 
-  
-  getById(productId) {
-    return this.productos.find(p => p.getId() === productId) || null;
+  _mapRowToProducto(row) {
+  return {
+    id: row.id,
+    nombre: row.nombre,
+    descripcion: row.descripcion,
+    precio: parseFloat(row.precio),
+    marca: row.marca,
+    categoria: row.categoria,
+    subcategoria: row.subcategoria,
+    stock: parseInt(row.stock),
+    disponible: row.disponible,
+    imagen: row.imagen_url, // o row.imagen si ya usas alias
+    destacado: row.destacado,
+  };
+}
+
+  async obtenerPorId(productId) {
+    const query = 'SELECT * FROM productos WHERE id = $1';
+    try
+    {
+      const result = await pool.query(query, [productId]);
+      if (result.rows.length > 0) {
+        return result.rows[0]; // Producto no encontrado
+      }else{
+        return []
+      }
+    
+    }
+    catch (error) {
+      console.error("Error retrieving product by ID:", error);
+      throw new Error("Database error while fetching product by ID.");
+    }
+    
+
   }
 
   checkStock(productId, cantidadSolicitada) {
@@ -88,8 +57,17 @@ class ProductoService {
   }
 
 
-  obtenerPorCategoria(categoria) {
-    return this.productos.filter(p => p.getCategoria() === categoria);
+  async obtenerPorCategoria(categoria) {
+   const query = 'SELECT * FROM productos WHERE categoria = $1 AND disponible = TRUE ORDER BY nombre';
+    try {
+      const result = await pool.query(query, [categoria]);
+      console.log(`✅ Retrieved products for category: ${categoria}`);
+      console.log(result.rows);
+      return result.rows;
+    } catch (error) {
+      console.error("Error retrieving products by category:", error);
+      throw new Error("Database error while fetching products by category.");
+    }
   }
 
 

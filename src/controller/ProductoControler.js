@@ -19,16 +19,17 @@ class ProductoController {
   /**
    * Obtener producto por ID
    */
-  obtenerPorId(req, res) {
+  async obtenerPorId(req, res) {
     try {
       const { id } = req.params;
-      const producto = this.productoService.getById(parseInt(id));
+      const producto = await this.productoService.obtenerPorId(parseInt(id));
 
       if (!producto) {
         return res.status(404).json({ error: "Producto no encontrado" });
       }
 
       res.json(producto);
+  
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -67,10 +68,12 @@ class ProductoController {
   /**
    * Obtener productos por categoría
    */
-  obtenerPorCategoria(req, res) {
+  async obtenerPorCategoria(req, res) {
     try {
       const { categoria } = req.params;
-      const productos = this.productoService.obtenerPorCategoria(categoria);
+      console.log("heyy");
+      const productos = await this.productoService.obtenerPorCategoria(categoria);
+      console.log("heyy");
       res.json(productos);
     } catch (error) {
       res.status(500).json({ error: error.message });
