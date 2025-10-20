@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const ENV = require("../config/ENV");
-const Cliente = require("../models/Entidades/Cliente");
-const Administrador = require("../models/Entidades/Administrador");
+const Cliente = require("../Modelo/Entidades/Cliente");
+const Administrador = require("../Modelo/Entidades/Administrador");
 
 class AuthService {
   constructor() {

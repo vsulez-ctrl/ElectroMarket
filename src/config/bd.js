@@ -4,9 +4,9 @@ const { Pool } = require('pg');
 const pool = new Pool({
   user: 'postgres',               // tu usuario de pgAdmin
   host: 'localhost',              // host local
-  database: 'electromarketbd',    // tu base de datos
-  password: '1234',      // cámbiala por tu contraseña real
-  port: 5433,                     // puerto por defecto
+  database: 'electromarket',    // tu base de datos
+  password: 'admin123',      // cámbiala por tu contraseña real
+  port: 5432,                     // puerto por defecto
 });
 
 // Verificar conexión

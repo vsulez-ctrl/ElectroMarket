@@ -1,5 +1,4 @@
-const AuthService = require("../service/Auth.service");
-
+const AuthService = require("../Servicios/Auth.service");
 // Crear una instancia única del servicio (Singleton pattern)
 const authService = new AuthService();
 

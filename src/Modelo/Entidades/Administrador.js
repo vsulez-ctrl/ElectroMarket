@@ -1,6 +1,6 @@
-const  SesionAdministrador = require( '../../patrones/Singleton/SesionAdministrador');
-const FabricaProducto = require('../../patrones/Fabrica/FabricaProducto');
-const   Reportes = require( '../../patrones/Estrategia/Reportes');
+const SesionAdministrador = require('../Patrones/Singleton/SesionAdministrador');
+const FabricaProducto = require('../Patrones/Fabrica/FabricaProducto');
+const   Reportes = require( '../patrones/Estrategia/Reportes');
 const Usuario = require("./Usuario")
 class Administrador extends Usuario {
     constructor(id, email,password, nombre, direccion, telefono, rol) {

@@ -1,4 +1,4 @@
-const ProductoA = require( '../../models/Entidades/ProductoA');
+const ProductoA = require('../../Entidades/ProductoA');
 
 class CrearA {
     static ultimoIdGenerado = 0;

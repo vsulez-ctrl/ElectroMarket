@@ -71,9 +71,7 @@ class ProductoController {
   async obtenerPorCategoria(req, res) {
     try {
       const { categoria } = req.params;
-      console.log("heyy");
       const productos = await this.productoService.obtenerPorCategoria(categoria);
-      console.log("heyy");
       res.json(productos);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -83,10 +81,10 @@ class ProductoController {
   /**
    * Obtener filtros disponibles
    */
- obtenerFiltrosBusqueda(req, res) {
+ async obtenerFiltrosDisponibles(req, res) {
   try {
-    const { query } = req.query;
-    const filtros = this.busquedaService.obtenerFiltrosDisponibles(query || "");
+    const { categoria } = req.params;
+    const filtros = await this.productoService.obtenerFiltrosDisponibles(categoria);
     res.json(filtros);
   } catch (error) {
     res.status(500).json({ error: error.message });

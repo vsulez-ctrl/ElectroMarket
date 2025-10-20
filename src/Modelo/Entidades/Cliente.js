@@ -1,5 +1,5 @@
 const Usuario = require("./Usuario")
-const CarritoCompra = require("../../patrones/Singleton/CarritoCompra");
+const CarritoCompra = require("../Patrones/Singleton/CarritoCompra");
 class Cliente extends Usuario{
     constructor(id, email, password, nombre, direccion, telefono, rol){
         super(id, email, password, nombre);

@@ -1,11 +1,10 @@
 const express = require('express');
-const carritoRoutes = require("./routes/Carrito.routes");
-const productoRoutes = require("./routes/Producto.routes");
-const AuthRoutes = require("./routes/Auth.routes");
-
-const adminRoutes = require("./routes/Administrador.routes")
-const adminProductoRoutes = require("./routes/ProductoAdmi.routes")
-const adminReporteRoutes = require("./routes/Reporte.routes")
+const carritoRoutes = require("./Rutas/Carrito.routes");
+const productoRoutes = require("./Rutas/Producto.routes");
+const AuthRoutes = require("./Rutas/Auth.routes");
+const adminRoutes = require("./Rutas/Administrador.routes");
+const adminProductoRoutes = require("./Rutas/ProductoAdmi.routes");
+const adminReporteRoutes = require("./Rutas/Reporte.routes");
 
 const cors = require('cors')
 

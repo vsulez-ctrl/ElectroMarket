@@ -1,6 +1,6 @@
 // routes/admin.routes.js
 const express = require("express");
-const { autenticar, isAdmin } = require("../middlewares/auth.middleware");
+const { autenticar, isAdmin } = require("../Controlador/auth.middleware");
 
 const router = express.Router();
 

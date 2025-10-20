@@ -1,7 +1,6 @@
-const FiltroPrecio = require("../patrones/Filtro/FiltroPrecio");
-const FiltroMarca = require("../patrones/Filtro/FiltroMarca");
-const FiltroDisponibilidad = require("../patrones/Filtro/FiltroDisponibilidad");
-
+const FiltroPrecio = require("../Modelo/Patrones/Filtro/FiltroPrecio");
+const FiltroMarca = require("../Modelo/Patrones/Filtro/FiltroMarca");
+const FiltroDisponibilidad = require("../Modelo/Patrones/Filtro/FiltroDisponibilidad");
 class BusquedaService {
   constructor(productService) {
     this.productService = productService; // Dependencia inyectada
@@ -39,10 +38,10 @@ class BusquedaService {
   /**
    * Retorna los filtros que se pueden aplicar al catálogo
    */
-  obtenerFiltrosDisponibles(query) {
+  obtenerFiltrosDisponibles(categoria,query) {
   const productosFiltrados = query
     ? this.buscarPorTexto(query)
-    : this.productService.obtenerTodos();
+    : this.productService.obtenerPorCategoria(categoria);
 
   return {
     marcas: [...new Set(productosFiltrados.map((p) => p.marca))],

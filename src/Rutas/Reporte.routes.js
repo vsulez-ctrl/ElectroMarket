@@ -1,7 +1,7 @@
 const express = require("express");
-const Reportes= require('../patrones/Estrategia/Reportes');
-const ReporteVentas = require(  '../patrones/Estrategia/ReporteVentas');
-const ReporteInventario = require('../patrones/Estrategia/ReporteInventario');
+const Reportes = require('../Modelo/Patrones/Estrategia/Reportes');
+const ReporteVentas = require('../Modelo/Patrones/Estrategia/ReporteVentas');
+const ReporteInventario = require('../Modelo/Patrones/Estrategia/ReporteInventario');
 
 const router = express.Router();
 const gestorReportes = new Reportes();

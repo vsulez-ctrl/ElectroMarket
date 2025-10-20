@@ -1,5 +1,5 @@
 const express = require("express");
-const FabricaProducto = require( '../patrones/Fabrica/FabricaProducto');
+const FabricaProducto = require('../Modelo/Patrones/Fabrica/FabricaProducto');
 const router = express.Router();
 const fabricaProducto = new FabricaProducto();
 

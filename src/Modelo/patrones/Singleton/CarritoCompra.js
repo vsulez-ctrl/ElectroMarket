@@ -1,5 +1,4 @@
-const ProductoService = require("../../service/Producto.service");
-
+const ProductoService = require("../../../Servicios/Producto.service");
 class CarritoCompra {
   constructor(userId) {
     if (CarritoCompra.instance) {

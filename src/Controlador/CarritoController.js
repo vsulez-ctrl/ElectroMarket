@@ -1,5 +1,4 @@
-const CarritoCompra = require("../patrones/Singleton/CarritoCompra");
-
+const CarritoCompra = require("../Modelo/patrones/Singleton/CarritoCompra");;
 class CarritoController {
     // ✅ Agregar producto - Updated to get clienteId from req
     static agregarProducto(req, res) {
