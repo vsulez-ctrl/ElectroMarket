@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-white; /* gris claro en toda la página */
+}
