@@ -27,6 +27,8 @@ const frontendRoutes = [
   '/registro',
   '/recuperar',
   '/restablecer-password',
+  '/contacto',
+  '/about',  
   '/productos/microcontroladores',
   '/productos/actuadores', 
   '/productos/sensores',

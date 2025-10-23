@@ -11,6 +11,8 @@ import MetodoPago from "./Pages/MetodoPago";
 import OlvidePassword from "./Pages/OlvidePassword";
 import RestablecerPassword from "./Pages/RestablecerPassword";
 import HomeAutenticado from "./Pages/HomeAutenticado";
+import Contacto from "./Pages/Contacto";
+import About from "./Pages/About";
 
 
 function App() {
@@ -23,6 +25,9 @@ function App() {
         <Route path="/recuperar" element={<OlvidePassword />} />
         <Route path="/olvide-password" element={<OlvidePassword />} />
         <Route path="/restablecer-password" element={<RestablecerPassword />} />
+        <Route path="/contacto" element={<Contacto />} />
+        <Route path="/about" element={<About />} />
+
         <Route path="/inicio" element={<HomeAutenticado />} />
         <Route path="productos/microcontroladores" element={<Microcontroladores />} />
         <Route path="productos/actuadores" element={<Actuadores />} />
