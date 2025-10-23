@@ -81,13 +81,9 @@ export default function Login() {
       const response = await verificarCodigo(usuarioPendiente.id, codigoVerificacion);
       
       console.log("✅ [VERIFICACIÓN] Código verificado:", response.data);
-
       if (response.data.token) {
-        // ✅ ACTUALIZAR EL CONTEXT DE AUTENTICACIÓN
         authLogin(response.data.usuario);
-        
-        // ✅ FORZAR NAVEGACIÓN CON setTimeout
-        setTimeout(() => {
+                setTimeout(() => {
           console.log("🔄 [VERIFICACIÓN] Navegando a /inicio...");
           window.location.href = "/inicio";
         }, 100);
@@ -214,7 +210,6 @@ export default function Login() {
     );
   }
 
-  // PANTALLA DE LOGIN NORMAL
   console.log("🎯 [RENDER] Renderizando pantalla de LOGIN");
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
@@ -236,6 +231,7 @@ export default function Login() {
           submitText="INICIAR SESIÓN"
         />
 
+        {/* 🔐 ENLACE "OLVIDÉ MI CONTRASEÑA" - ACTUALIZADO A /recuperar */}
         <div className="mt-4 text-center">
           <Link 
             to="/recuperar" 

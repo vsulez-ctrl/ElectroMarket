@@ -12,16 +12,18 @@ import OlvidePassword from "./Pages/OlvidePassword";
 import RestablecerPassword from "./Pages/RestablecerPassword";
 import HomeAutenticado from "./Pages/HomeAutenticado";
 
+
 function App() {
   return (
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/inicio" element={<HomeAutenticado />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/recuperar" element={<OlvidePassword />} />
         <Route path="/olvide-password" element={<OlvidePassword />} />
         <Route path="/restablecer-password" element={<RestablecerPassword />} />
+        <Route path="/inicio" element={<HomeAutenticado />} />
         <Route path="productos/microcontroladores" element={<Microcontroladores />} />
         <Route path="productos/actuadores" element={<Actuadores />} />
         <Route path="productos/sensores" element={<Sensores />} />
