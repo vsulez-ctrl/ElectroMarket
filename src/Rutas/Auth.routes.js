@@ -1,20 +1,16 @@
 const express = require("express");
 const AuthController = require("../Controlador/AuthController");
-
+const VerificacionController = require("../Controlador/VerificacionController");
+const PasswordResetController = require("../Controlador/PasswordResetController");
 const router = express.Router();
-
-// Ruta para registrar nuevo cliente
 router.post("/registrar", AuthController.registrar);
-
-// Ruta para hacer login y obtener token
 router.post("/login", AuthController.login);
-
-// Ruta para verificar si el token es válido (opcional)
 router.get("/verificar", AuthController.verificarToken);
-
-// Ruta para debug - ver todos los clientes (opcional, remover en producción)
 router.get("/clientes", AuthController.obtenerClientes);
-
 router.get("/administradores", AuthController.obtenerAdministradores);
-
+router.post("/verificar-codigo", VerificacionController.verificarCodigo);
+router.post("/reenviar-codigo", VerificacionController.reenviarCodigo);
+router.post("/olvide-password", PasswordResetController.solicitarRecuperacion);
+router.post("/verificar-token-reset", PasswordResetController.verificarToken);
+router.post("/restablecer-password", PasswordResetController.restablecerPassword);
 module.exports = router;

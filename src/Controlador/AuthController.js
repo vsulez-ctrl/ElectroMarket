@@ -1,46 +1,26 @@
 const AuthService = require("../Servicios/Auth.service");
-// Crear una instancia única del servicio (Singleton pattern)
-const authService = new AuthService();
 
 class AuthController {
     static async registrar(req, res) {
         try {
             const { nombre, email, password, direccion, telefono, rol } = req.body;
 
-            // Validaciones básicas
             if (!nombre || !email || !password) {
-                return res.status(400).json({
-                    error: "Nombre, email y contraseña son obligatorios"
-                });
+                return res.status(400).json({ error: "Nombre, email y contraseña son obligatorios" });
             }
 
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
-
-            if (!passwordRegex.test(password)) {
-                return res.status(400).json({
-                    error: "La contraseña debe tener mínimo 8 caracteres, incluyendo al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo (!@#$%^&*)."
-                });
-            }
-
-            // Registrar cliente
+            const authService = new AuthService();
             const nuevoUsuario = await authService.registrar({
-                nombre,
-                email,
-                password,
-                direccion,
-                telefono,
-                rol: rol || "cliente"
+                nombre, email, password, direccion, telefono, rol: rol || "cliente"
             });
 
             res.status(201).json({
                 message: "Usuario registrado exitosamente",
-                usuario: nuevoUsuario.getInfo()
+                usuario: nuevoUsuario
             });
 
         } catch (error) {
-            res.status(400).json({
-                error: error.message
-            });
+            res.status(400).json({ error: error.message });
         }
     }
 
@@ -48,26 +28,38 @@ class AuthController {
         try {
             const { email, password } = req.body;
 
-            // Validaciones básicas
             if (!email || !password) {
-                return res.status(400).json({
-                    error: "Email y contraseña son obligatorios"
+                return res.status(400).json({ error: "Email y contraseña son obligatorios" });
+            }
+
+            console.log("🎯 [AUTH CONTROLLER] Iniciando login...");
+            
+            const authService = new AuthService();
+            const resultado = await authService.login(email, password);
+
+            console.log("📨 [AUTH CONTROLLER] Resultado del servicio:", resultado);
+
+            // ✅ ENVIAR RESPUESTA CORRECTAMENTE SEGÚN EL TIPO DE RESULTADO
+            if (resultado.requiereVerificacion) {
+                console.log("🔄 [AUTH CONTROLLER] Enviando respuesta de VERIFICACIÓN REQUERIDA");
+                res.json({
+                    requiereVerificacion: true,
+                    mensaje: resultado.mensaje,
+                    usuarioId: resultado.usuarioId,
+                    email: resultado.email
+                });
+            } else {
+                console.log("🎉 [AUTH CONTROLLER] Enviando respuesta de LOGIN EXITOSO");
+                res.json({
+                    message: "Login exitoso",
+                    token: resultado.token,
+                    usuario: resultado.usuario
                 });
             }
 
-            // Hacer login
-            const resultado = await authService.login(email, password);
-
-            res.json({
-                message: "Login exitoso",
-                token: resultado.token,
-                usuario: resultado.usuario.getInfo()
-            });
-
         } catch (error) {
-            res.status(401).json({
-                error: error.message
-            });
+            console.error("❌ [AUTH CONTROLLER] Error en login:", error.message);
+            res.status(401).json({ error: error.message });
         }
     }
 
@@ -83,46 +75,42 @@ class AuthController {
                 return res.status(401).json({ error: "Formato de token inválido" });
             }
 
+            const authService = new AuthService();
             const decoded = authService.verificarToken(token);
             
             res.json({
                 message: "Token válido",
-                cliente: {
+                usuario: {
                     id: decoded.id,
-                    email: decoded.email
+                    email: decoded.email,
+                    nombre: decoded.nombre,
+                    rol: decoded.rol
                 }
             });
 
         } catch (error) {
-            res.status(401).json({
-                error: error.message
-            });
+            res.status(401).json({ error: error.message });
         }
     }
 
     // Método adicional para debug - obtener todos los clientes
-    static obtenerClientes(req, res) {
+    static async obtenerClientes(req, res) {
         try {
-            const clientes = authService.obtenerTodosLosClientes();
-            res.json({
-                clientes: clientes
-            });
+            const authService = new AuthService();
+            const clientes = await authService.obtenerTodosLosClientes();
+            res.json({ clientes });
         } catch (error) {
-            res.status(500).json({
-                error: error.message
-            });
+            res.status(500).json({ error: error.message });
         }
     }
-     static obtenerAdministradores(req, res) {
+
+    static async obtenerAdministradores(req, res) {
         try {
-            const administradores = authService.obtenerTodosLosAdministradores();
-            res.json({
-                admin: administradores
-            });
+            const authService = new AuthService();
+            const administradores = await authService.obtenerTodosLosAdministradores();
+            res.json({ admin: administradores });
         } catch (error) {
-            res.status(500).json({
-                error: error.message
-            });
+            res.status(500).json({ error: error.message });
         }
     }
 }

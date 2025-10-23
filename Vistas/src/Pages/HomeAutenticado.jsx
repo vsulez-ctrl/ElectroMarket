@@ -4,44 +4,23 @@ import MiniProyectos from "../components/home/MiniProyectos";
 import Beneficios from "../components/home/Beneficios";
 import Footer from "../components/layout/Footer";
 import ProductosDestacados from "../components/home/ProductosDestacados";
-import { useEffect } from "react";
+import { useAuth } from '../services/AuthContext';
 
-const Home = () => {
-  useEffect(() => {
-    // Verificar si hay usuario logeado
-    const user = localStorage.getItem("user");
-    console.log("🏠 [HOME] Usuario en localStorage:", user);
-    
-    if (user) {
-      console.log("✅ Usuario autenticado:", JSON.parse(user));
-    } else {
-      console.log("❌ No hay usuario autenticado");
-    }
-  }, []);
-
-  const getUserInfo = () => {
-    try {
-      const user = localStorage.getItem("user");
-      return user ? JSON.parse(user) : null;
-    } catch {
-      return null;
-    }
-  };
-
-  const user = getUserInfo();
+const HomeAutenticado = () => {
+  const { user } = useAuth();
 
   return (
     <>
       <Navbar/>
       
-      {/* Mensaje de bienvenida si está logueado */}
+      {/* Mensaje de bienvenida especial para usuarios autenticados */}
       {user && (
         <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-4 px-4 text-center shadow-lg">
           <p className="text-lg font-bold">
             ¡Bienvenido de nuevo, <strong>{user.nombre}</strong>! 
           </p>
           <p className="text-sm mt-1 opacity-90">
-            Email: {user.email} | Disfruta de tu experiencia en ElectroMarket
+            Ahora puedes disfrutar de todos los beneficios de ElectroMarket
           </p>
         </div>
       )}
@@ -55,4 +34,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeAutenticado;

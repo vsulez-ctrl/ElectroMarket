@@ -1,11 +1,62 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Form from "../components/formulario/Form";
 import logo from "../assets/imagenes/ui/logo.png";
 import IconsButton from "../components/layout/IconsButton";
 import { register } from "../services/authService";
 
 const Registro = () => {
+  const [form, setForm] = useState({
+    nombre: "",
+    email: "",
+    password: "",
+    direccion: "",
+    telefono: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
+
+  const fields = [
+    { name: "nombre", placeholder: "Nombre completo", type: "text" },
+    { name: "email", placeholder: "Correo Electrónico", type: "email" },
+    { name: "direccion", placeholder: "Dirección", type: "text" },
+    { name: "telefono", placeholder: "Teléfono", type: "tel" },
+    { name: "password", placeholder: "Contraseña", type: "password" }
+  ];
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setError("");
+    setSuccess("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await register(form);
+      console.log("✅ Registro exitoso:", response.data);
+      
+      setSuccess("¡Registro exitoso! Redirigiendo al login...");
+      
+      // Redirigir después de 2 segundos
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+      
+    } catch (err) {
+      console.error("❌ Error en registro:", err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const Flecha = () => (
     <svg
@@ -24,60 +75,12 @@ const Registro = () => {
     </svg>
   );
 
-  const [form, setForm] = useState({
-  nombre: "",
-  email: "",
-  password: "",
-  direccion: "",
-  telefono: "",
-  rol: "cliente"  // puedes dejarlo por defecto
-});
-
-
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({}); // Ahora guardamos errores por campo
-
-  const fields = [
-  { name: "nombre", placeholder: "Nombre" },
-  { name: "email", placeholder: "Correo Electrónico", type: "email" },
-  { name: "direccion", placeholder: "Dirección" },
-  { name: "telefono", placeholder: "Teléfono" },
-  { name: "password", placeholder: "Contraseña", type: "password" }
-];
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Limpiar error al escribir
-  };
-
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setErrors({});
-  console.log("Enviando formulario:", form);
-
-  try {
-    const response = await register(form);
-    console.log("Respuesta del backend:", response.data);
-    alert(response.data.message); // muestra mensaje de éxito
-  } catch (err) {
-    console.error("Error al registrar usuario:", err.response?.data );
-    setErrors({ general: err.response?.data?.error || "Error al registrar usuario" });
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-  
-
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="relative bg-gray-900 rounded-xl shadow-2xl p-5 w-full max-w-lg text-center">
-        <img src={logo} className="mb-4 mt-3 w-30 h-30" alt="Logo" />
+    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="relative bg-gray-800 rounded-xl shadow-2xl p-8 w-full max-w-md text-center">
+        <img src={logo} className="mb-4 mt-3 w-30 h-30 mx-auto" alt="Logo" />
         <h2 className="text-white text-xl font-semibold mb-6">
-          Bienvenidos a ElectroMarket
+          Crear Cuenta
         </h2>
 
         <Link to="/" className="absolute top-2 left-2">
@@ -90,17 +93,26 @@ const handleSubmit = async (e) => {
           onChange={handleChange}
           onSubmit={handleSubmit}
           loading={loading}
-          errors={errors} // Ahora pasamos los errores por campo
+          msg={error}
           submitText="REGISTRARSE"
         />
 
-        {errors.general && (
-          <p className="text-red-500 mt-2 text-sm">{errors.general}</p>
+        {/* Mensaje de éxito */}
+        {success && (
+          <div className="mt-4 p-3 bg-green-900 border border-green-700 rounded-md">
+            <p className="text-green-200 text-sm">{success}</p>
+          </div>
+        )}
+
+        {/* Mensaje de error */}
+        {error && (
+          <div className="mt-4 p-3 bg-red-900 border border-red-700 rounded-md">
+            <p className="text-red-200 text-sm">{error}</p>
+          </div>
         )}
 
         <p className="text-xs text-gray-400 mt-4">
-          La contraseña debe tener 1 mayúscula, 1 minúscula, 1 número y 1 símbolo 
-          (!@#$%^&*). Mínimo 8 caracteres.
+          🔒 La contraseña debe tener: 8 caracteres, 1 mayúscula, 1 minúscula, 1 número y 1 símbolo (!@#$%^&*)
         </p>
 
         <div className="mt-6 text-gray-300 text-sm">
